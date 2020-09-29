@@ -1,6 +1,20 @@
 function stats = fcOnly(data,compSelect,winlenSecs,winshiftSecs,fs)
 %FCONLY take data and output FC matrices along time
-% (c) Jacek P. Dmochowski AKA "Loquacious D" AKA "Pomeranian Boss", 2018-
+% (c) Jacek P. Dmochowski AKA "Loquacious D", 2018-
+
+% data: channels x time EEG array (NB: do not pass this function an EEG
+%   array where the number of samples is less than the number of channels)
+% compSelect: a two-element vector where the first element selects the
+%   component decomposition technique (1=PCA default, 2=ICA), and the second element
+%   selects the number of components (defaults to 6)
+% winlenSecs: window length in seconds (defaults to 5)
+% winshiftSecs: window shift in seconds (defaults to 1)
+% fs: sampling rate of EEG, defaults to 64 Hz
+
+% stats: output struct with the following fields
+%   fs: sampling rate
+%   fc: flattened functional connectivity matrix for each time window
+%   winStarts: start times of each window
 
 if nargin<5 || isempty(fs), fs=64; end
 if nargin<4 || isempty(winshiftSecs), winshiftSecs=5; end
@@ -29,7 +43,6 @@ bDelta = fir1(filterOrder,[1 4]/(fs/2));
 bTheta = fir1(filterOrder,[4 8]/(fs/2));
 bAlpha = fir1(filterOrder,[8 13]/(fs/2));
 bBeta = fir1(filterOrder,[13 30]/(fs/2));
-bGamma= fir1(filterOrder,[30 55]/(fs/2));
 
 %% generate Hilbert envelopes
 dataDelta = filter(bDelta,1,data,[],2);
@@ -44,14 +57,10 @@ envAlpha=log(abs(hilbert(dataAlpha.').'));
 dataBeta = filter(bBeta,1,data,[],2);
 envBeta=log(abs(hilbert(dataBeta.').'));
 
-dataGamma = filter(bGamma,1,data,[],2);
-envGamma=log(abs(hilbert(dataGamma.').'));
-
 eData=[envDelta;...
     envTheta;...
     envAlpha;...
-    envBeta;...
-    envGamma];
+    envBeta];
 
 %% windowed covariance
 nWins=floor( (nSamples-winlen-1)/winshift + 1);
