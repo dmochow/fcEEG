@@ -1,6 +1,24 @@
 function stats = fcOnly(data,compSelect,winlenSecs,winshiftSecs,fs,gamma)
 %FCONLY take data and output FC matrices along time
 % (c) Jacek P. Dmochowski AKA "Loquacious D" AKA "Pomeranian Boss", 2018-
+%
+%
+% data: channels x samples matrix of EEG samples
+% compSelect: two-element array where:
+%   first element selects PCA (1) or ICA (2) or electrode-space (0)
+%   second element selects the number of components
+%   defaults to [1,6], or PCA with 6 components
+% winlenSecs: length of sliding window in seconds
+% winshiftSecs: how often the window slides, also in seconds
+% fs: sampling rate of EEG, defaults to 64 Hz
+% gamma: binary indicator for whether to include gamma-band in the FC
+%   matrix (defaults to 0 because)
+%
+% stats: output data structure containing
+%   fc: flattened functional connectivity matrices - element by time window
+%   winStarts: starting point of each time window in samples
+%   fs: sampling rate, returned for convenience
+
 
 if nargin<6 || isempty(gamma), gamma=0; end
 if nargin<5 || isempty(fs), fs=64; end
