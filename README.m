@@ -18,7 +18,7 @@
 % We then measure the functional connectivity matrix (i.e., Pearson
 % correlation coefficients) among all pairs of the 24 Hilbert magnitude
 % time series
-
+%
 % The result is returned as a flattened FC matrix where the upper diagonal
 % entries of the correlation matrix are returned.
 %
@@ -29,6 +29,10 @@
 % paper:
 % 
 % Dmochowski, J. P., Bezdek, M. A., Abelson, B. P., Johnson, J. S., Schumacher, E. H., & Parra, L. C. (2014). Audience preferences are predicted by temporal reliability of neural processing. Nature communications, 5(1), 1-9.
+%
+% download data from:
+% https://www.dropbox.com/sh/ml8bsmr5v2dq1sg/AAAbdk3tqM1SOaFKbNONYQHBa?dl=0
+% put it in ../data/superbowl or change the path below
 %
 % demoSlidingWindow.m demonstrates how to compute dFC
 % demoStaticFc.m demonstrates how to compute static FC
